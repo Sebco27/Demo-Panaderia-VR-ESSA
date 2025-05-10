@@ -32,3 +32,24 @@ UserSettings/
 .plastic/
 PlasticSCM/
 ignore.conf
+
+# Archivos grandes que no deberían subirse
+*.psd
+*.tga
+*.fbx
+*.obj
+*.blend
+*.wav
+*.mp3
+*.mp4
+*.mov
+*.avi
+*.zip
+*.rar
+*.7z
+*.iso
+
+# Carpetas opcionales grandes
+/[Aa]ssets/StreamingAssets/
+/Assets/RawAssets/
+/Assets/External/
