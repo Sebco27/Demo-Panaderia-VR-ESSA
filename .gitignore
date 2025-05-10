@@ -1,0 +1,55 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+MemoryCaptures/
+UserSettings/
+
+# VS/JetBrains IDEs
+.vscode/
+*.csproj
+*.sln
+*.user
+*.unityproj
+*.pidb
+*.suo
+*.tmp
+*.booproj
+
+# Unity Cache
+*.unitypackage
+*.apk
+*.aab
+*.exe
+
+# Mac
+.DS_Store
+
+# Plastic SCM / Unity Version Control
+.plastic/
+PlasticSCM/
+ignore.conf
+
+# Archivos grandes que no deberían subirse
+*.psd
+*.tga
+*.fbx
+*.obj
+*.blend
+*.wav
+*.mp3
+*.mp4
+*.mov
+*.avi
+*.zip
+*.rar
+*.7z
+*.iso
+
+# Carpetas opcionales grandes
+/[Aa]ssets/StreamingAssets/
+/Assets/RawAssets/
+/Assets/External/
