@@ -15,7 +15,7 @@ public class DoughShapeChanger : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (hasShaped) return;                         // sólo una vez
+        if (hasShaped) return;    // sólo una vez
         if (!collision.collider.CompareTag(rollerTag)) return;
 
         hasShaped = true;

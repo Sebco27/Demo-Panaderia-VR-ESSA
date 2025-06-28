@@ -8,6 +8,7 @@ public class ChangeMasaColorAndSpin : MonoBehaviour
     public UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor socketInteractor;
     public Material highlightMaterial;
     public bool materialCambiado = false;
+    public AudioSource mixerAudio;
 
     [Header("Delays y rotación")]
     [Tooltip("Retraso antes de empezar a girar (s)")]
@@ -47,6 +48,8 @@ public class ChangeMasaColorAndSpin : MonoBehaviour
         // Esperamos el tiempo de delay
         yield return new WaitForSeconds(spinDelay);
         socketInteractor.socketActive = false;
+
+        mixerAudio.Play();
 
         // Rotamos durante spinDuration
         float elapsed = 0f;

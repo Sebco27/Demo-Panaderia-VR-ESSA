@@ -9,16 +9,23 @@ public class OvenBakeController : MonoBehaviour
     public Transform door;
 
     [Header("Rotaciones de la puerta")]
-    [Tooltip("Rotación local con la puerta abierta (por defecto)")]
-    public Vector3 openEuler = new Vector3(-89, 0, 0);
-    [Tooltip("Rotación local con la puerta cerrada")]
-    public Vector3 closedEuler = new Vector3(-89, -90, 0);
+    public Vector3 openEuler = Vector3.zero;
+    public Vector3 closedEuler = new Vector3(0, -90, 0);
 
     [Header("Tiempos")]
-    [Tooltip("Cuánto tarda en hornearse (s)")]
     public float bakeTime = 5f;
-    [Tooltip("Velocidad de giro de la puerta (grados/s)")]
     public float doorSpeed = 180f;
+
+    [Header("Materiales")]
+    [Tooltip("Material final")]
+    public Material finalMaterial;
+
+    public AudioSource ovenSound;
+
+    // Internos:
+    GameObject currentItem;
+    Material originalMaterial;
+    Renderer itemRenderer;
 
     private void OnEnable()
     {
@@ -32,8 +39,12 @@ public class OvenBakeController : MonoBehaviour
 
     private void OnItemInserted(SelectEnterEventArgs args)
     {
-        // El item ya ha sido "snapeado" al Attach Transform del socket
-        // Arrancamos la secuencia de horneado
+        // Guardamos el item y su renderer
+        currentItem   = args.interactableObject.transform.gameObject;
+        itemRenderer  = currentItem.GetComponentInChildren<Renderer>();
+        originalMaterial = itemRenderer.material;
+
+        // Iniciamos la secuencia
         StartCoroutine(BakeSequence());
     }
 
@@ -42,18 +53,27 @@ public class OvenBakeController : MonoBehaviour
         // 1) Cerramos la puerta
         yield return StartCoroutine(RotateDoor(openEuler, closedEuler));
 
-        // 2) Esperamos el tiempo de horneado
-        yield return new WaitForSeconds(bakeTime);
+        // 2) Tiempo de horneado
+        yield return new WaitForSeconds(bakeTime/2f);
+        
+        ovenSound.Play();
 
-        // 3) Abrimos la puerta
+        // 3) Asignamos material final (opcional)
+        if (itemRenderer != null && finalMaterial != null)
+            itemRenderer.material = finalMaterial;
+
+        // 4) Tiempo de horneado
+        yield return new WaitForSeconds(bakeTime/2f);
+
+        // 5) Abrimos la puerta
         yield return StartCoroutine(RotateDoor(closedEuler, openEuler));
     }
 
     private IEnumerator RotateDoor(Vector3 fromEuler, Vector3 toEuler)
     {
+        float angle   = Vector3.Angle(fromEuler, toEuler);
+        float duration= angle / doorSpeed;
         float elapsed = 0f;
-        float duration = Vector3.Angle(fromEuler, toEuler) / doorSpeed;
-        // Asegúrate de partir de la rotación “from”
         door.localEulerAngles = fromEuler;
 
         while (elapsed < duration)
@@ -63,7 +83,6 @@ public class OvenBakeController : MonoBehaviour
             door.localEulerAngles = Vector3.LerpUnclamped(fromEuler, toEuler, t);
             yield return null;
         }
-
         door.localEulerAngles = toEuler;
     }
 }

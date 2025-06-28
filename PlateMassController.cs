@@ -5,6 +5,10 @@ public class PlateMassController : MonoBehaviour
     [Header("Prefab de la masa y punto de spawn")]
     public GameObject masaPrefab;
     public Transform spawnPoint;
+    public AudioSource doughSound;
+    public AudioSource eggSound;
+    public AudioSource milkSound;
+    public AudioSource flourSound;
 
     [Header("Escalas")]
     public Vector3 initialScale = Vector3.one * 0.2f;     // tamaño tras 1 ingrediente
@@ -18,11 +22,28 @@ public class PlateMassController : MonoBehaviour
     /// Llamarás a este método desde cada socket en SelectEntered
     /// para notificar que has añadido un ingrediente.
     /// </summary>
-    public void AddIngredient()
+
+    public void AddIngredient(GameObject ingrediente)
     {
         if (ingredientCount >= maxIngredients) return;
         ingredientCount++;
-
+        
+        int eggLayerMask = LayerMask.NameToLayer("Egg");
+        int milkLayerMask = LayerMask.NameToLayer("Milk");
+        int flourLayerMask = LayerMask.NameToLayer("Flour");
+        if (ingrediente.layer == eggLayerMask)
+        {
+            eggSound.Play();
+        }
+        if (ingrediente.layer == milkLayerMask)
+        {
+            milkSound.Play();
+        }
+        if (ingrediente.layer == flourLayerMask)
+        {
+            flourSound.Play();
+        }
+        doughSound.Play();
         // Si aún no hay masa, la instanciamos
         if (masaInstance == null)
         {
